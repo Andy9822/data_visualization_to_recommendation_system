@@ -13,13 +13,19 @@ class DB:
 
     def query(self, text):
         self.cur.execute(text)
-        self.conn.commit()
         return self.cur.fetchall()
 
     def queryWithParams(self, text, params):
         self.cur.execute(text, params)
-        self.conn.commit()
         return self.cur.fetchall()
+
+    def queryWithoutFetch(self, text):
+        self.cur.execute(text)
+        self.commit()
+        return
+
+    def commit(self):
+        self.conn.commit()
 
     def __del__(self):
         self.cur.close()

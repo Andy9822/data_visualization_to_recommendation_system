@@ -9,6 +9,10 @@ def load_dataset(filename) -> DataFrame:
     filered_df = df[['title_ID', 'user_ID',
                      'playertype', 'deviceGroup', 'genres']]
 
+    # In case there are some null values, we remove those rows
+    null_rows, _ = np.where(pandas.isnull(filered_df))
+    filered_df = filered_df.drop(null_rows)
+
     null_rows, null_columns = np.where(pandas.isnull(filered_df))
     if len(null_rows):
         raise ValueError(

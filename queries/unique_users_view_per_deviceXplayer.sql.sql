@@ -5,7 +5,7 @@ CREATE OR REPLACE FUNCTION count_players_per_device (int)
     )
     AS $$
     SELECT
-        count(*) AS total_views,
+        count(distinct user_id) AS total_views,
 		Players.name
     FROM
         Views

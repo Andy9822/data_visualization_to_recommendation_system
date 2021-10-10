@@ -2,6 +2,8 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 import PlayerPerDeviceSVG from './PlayerPerDeviceSVG'
+import ViewedGenreAlsoViewedSVG from './ViewedGenreAlsoViewedSVG'
+// import DeviceInfluenceOnGenres from './DeviceInfluenceOnGenres'
 
 const data = {
   name: 'devices',
@@ -72,6 +74,8 @@ const data = {
 }
 
 function App() {
+  // const d3Version = parseInt(version.split('.')[0], 10)
+
   return (
     <div className="App">
       <header className="App-header">
@@ -92,7 +96,15 @@ function App() {
           Learn React
         </a>
       </header>
-      <PlayerPerDeviceSVG data={data} />
+      { false ? (
+        <>
+          oi
+        </>
+      ) : (
+        <>
+          <PlayerPerDeviceSVG data={data} />
+        </>
+      )}
     </div>
   )
 }

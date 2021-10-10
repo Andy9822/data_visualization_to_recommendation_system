@@ -3,6 +3,14 @@
 import React from 'react'
 import * as d3 from 'd3'
 
+const getMostParentNode = (node) => {
+  let currentNode = node
+  while (currentNode.parent) {
+    currentNode = currentNode.parent
+  }
+  return currentNode
+}
+
 const PlayerPerDeviceSVG = ({ data }) => {
   const svgRef = React.useRef(null)
   const svgWidth = 960
@@ -45,7 +53,8 @@ const PlayerPerDeviceSVG = ({ data }) => {
     function zoom(event, d) {
       focus = d
 
-      const transition = svg.transition()
+      console.log(svgEl);
+      const transition = svgEl.transition()
         .duration(event.altKey ? 7500 : 750)
         .tween('zoom', () => {
           const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2])
@@ -86,7 +95,10 @@ const PlayerPerDeviceSVG = ({ data }) => {
       .join('text')
       .style('fill-opacity', (d) => (d.parent === root ? 1 : 0))
       .style('display', (d) => (d.parent === root ? 'inline' : 'none'))
-      .text((d) => d.data.name)
+      .text((d) => {
+        const value = d.data.value || getMostParentNode(d).value
+        return `${d.data.name} (${value})`
+      })
 
     zoomTo([root.x, root.y, root.r * 2])
   }, [data])

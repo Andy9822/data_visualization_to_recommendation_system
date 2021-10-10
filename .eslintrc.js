@@ -22,6 +22,10 @@ module.exports = {
     semi: 'off',
     'no-shadow': 'off',
     'react/prop-types': 'off',
+    'no-tabs': 'off',
+    camelcase: 'off',
+    'no-unused-vars': 'warn',
+    'max-len': 'warn',
   },
   settings: {
     'import/resolver': {

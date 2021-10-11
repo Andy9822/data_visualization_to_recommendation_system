@@ -3,17 +3,15 @@
 /* eslint-disable react/no-this-in-sfc */
 import React from 'react'
 import * as d3 from 'd3'
-import axios from 'axios'
 
-const PlayerPerDeviceSVG = () => {
+const PlayerPerDeviceSVG = ({ data }) => {
   const svgRef = React.useRef(null)
   const svgWidth = 960
   const svgHeight = 960
   const innerRadius = Math.min(svgWidth, svgHeight) * 0.5 - 90
   const outerRadius = innerRadius + 10
 
-  React.useEffect(async () => {
-    const data = await (await axios.get('http://wsl:3030')).data
+  React.useEffect(() => {
     const ribbon = d3.ribbonArrow()
       .radius(innerRadius - 1)
       .padAngle(1 / innerRadius)

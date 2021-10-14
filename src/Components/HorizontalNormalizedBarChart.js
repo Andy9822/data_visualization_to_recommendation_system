@@ -5,6 +5,19 @@ import React, { useRef, useState, useEffect } from 'react'
 import * as d3 from 'd3'
 import { legend } from './Legend'
 
+const xaya = [
+  {
+    name: 'Ficção', android: '598478', tv: '174781', desktop: '625599', mobile: '316598',
+  },
+  {
+    name: 'Policial', android: '690830', tv: '5354112', desktop: '99926', mobile: '638789',
+  },
+  {
+    name: 'Reggaeton', android: '1363631', tv: '1421557', desktop: '1357210', mobile: '528108',
+  },
+]
+xaya.columns = ['name', 'android', 'tv', 'desktop', 'mobile']
+
 const HorizontalNormalizedBarChart = ({ data }) => {
   const svgRef = useRef(null)
   const legendRef = useRef(null)

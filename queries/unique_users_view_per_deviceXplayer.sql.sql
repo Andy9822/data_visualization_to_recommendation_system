@@ -10,7 +10,6 @@ CREATE OR REPLACE FUNCTION count_players_per_device (int)
     FROM
         Views
         JOIN Players ON player_id = Players.id
-        JOIN Devices ON device_id = Devices.id
 	WHERE
 		device_id = $1 
     GROUP BY

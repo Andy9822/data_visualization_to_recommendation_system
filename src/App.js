@@ -1,9 +1,10 @@
 import React from 'react'
+import { version } from 'd3'
 import logo from './logo.svg'
 import './App.css'
 import PlayerPerDeviceSVG from './PlayerPerDeviceSVG'
 import ViewedGenreAlsoViewedSVG from './ViewedGenreAlsoViewedSVG'
-// import DeviceInfluenceOnGenres from './DeviceInfluenceOnGenres'
+import PlayerInfluenceOnGenres from './Visualizations/PlayerInfluenceOnGenres'
 
 const data = {
   name: 'devices',
@@ -74,7 +75,7 @@ const data = {
 }
 
 function App() {
-  // const d3Version = parseInt(version.split('.')[0], 10)
+  const d3Version = parseInt(version.split('.')[0], 10)
 
   return (
     <div className="App">
@@ -96,13 +97,17 @@ function App() {
           Learn React
         </a>
       </header>
-      { false ? (
+      {false ? (
         <>
-          oi
+          {' '}
+          <PlayerPerDeviceSVG data={data} />
         </>
+
       ) : (
         <>
-          <PlayerPerDeviceSVG data={data} />
+          {' '}
+          {/* <PlayerInfluenceOnGenres /> */}
+          <PlayerInfluenceOnGenres />
         </>
       )}
     </div>

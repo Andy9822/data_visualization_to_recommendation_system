@@ -87,7 +87,7 @@ app.get('/devicesPerTitles', async (req, res) => {
   res.send(cache.devicesPerTitles)
 })
 
-app.get('/', async (req, res) => {
+app.get('/deviceInfluenceOnGenres', async (req, res) => {
   if (!cache.playerInfluenceOnGenre) {
     const { rows } = await db.query(`
     WITH top_10_categories AS (
@@ -109,12 +109,48 @@ app.get('/', async (req, res) => {
       count_player_influence_on_genres(p.id, ARRAY(select id from top_10_categories)) AS counter
     ORDER BY on_player;`)
 
-    const processedRows = rows
-      .map(({ total_views, genre, on_player }) => (
-        { source: on_player, target: genre, value: total_views }
-      ))
+    const processedRowsChord = rows
+      .reduce((acc, { total_views, genre, on_player }) => {
+        // Add to .chord in the expected structured form
+        acc.chord.push({ source: on_player, target: genre, value: total_views })
 
-    cache.playerInfluenceOnGenre = processedRows
+        // Sum of players views
+        acc.playersCount[on_player] = acc.playersCount[on_player]
+          ? acc.playersCount[on_player] + parseInt(total_views, 10)
+          : parseInt(total_views, 10)
+
+        // Prepare in the format for the stacked version
+        acc.bar[genre] = { ...acc.bar[genre], name: genre, [on_player]: total_views }
+
+        // Utility to be able to retrieve all different players name
+        acc.players[on_player] = null
+
+        return acc
+      }, {
+        chord: [],
+        bar: {},
+        playersCount: {},
+        players: {},
+      })
+
+    // Change the structure to match the expected format by the stacked chart
+    processedRowsChord.processedBar = Object.entries(processedRowsChord.bar).map(([key, value]) => {
+      const objeto = {}
+      Object.entries(value).forEach(([key, value]) => {
+        // Normalize values for each player
+        if (key === 'name') { objeto.name = value } else { objeto[key] = String(parseInt((value / processedRowsChord.playersCount[key]) * 100, 10)) }
+      })
+      return objeto
+    })
+
+    // Players names list
+    const columns = ['name', ...Object.keys(processedRowsChord.players).map((key) => key)]
+
+    cache.playerInfluenceOnGenre = {
+      chord: processedRowsChord.chord,
+      bar: processedRowsChord.processedBar,
+      columns,
+    }
   }
   res.send(cache.playerInfluenceOnGenre)
 })

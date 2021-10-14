@@ -23,9 +23,9 @@ const PlayerInfluenceOnGenres = () => {
     <>
       <div onChange={handleChangeSelect}>
         <input selected type="radio" value="default" name="gender" checked={chartType === 'default'} />
-        Influência direta
+        Influência dos usuários de cada dispostivio
         <input type="radio" value="normalized" name="gender" checked={chartType === 'normalized'} />
-        Proporção de influência
+        Influência proporiconal dos usuários de cada dispostivio
       </div>
       {chartType === 'default'
         ? <Chord data={data.chord} />

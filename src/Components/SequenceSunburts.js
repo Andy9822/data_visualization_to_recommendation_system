@@ -19,7 +19,7 @@ const stringToColour = (str) => {
 const SequenceSunburts = ({ data }) => {
   useEffect(async () => {
     // Dimensions of sunburst.
-    const width = 750;
+    const width = 900;
     const height = 600;
     const radius = Math.min(width, height) / 2;
 
@@ -217,6 +217,17 @@ const SequenceSunburts = ({ data }) => {
 
     // Update the breadcrumb trail to show the current sequence and percentage.
     function updateBreadcrumbs(nodeArray, percentageString) {
+      console.log(nodeArray[nodeArray.length - 1])
+      const lastElement = nodeArray[nodeArray.length - 1]
+      const isChild = Boolean(lastElement.parent.parent)
+      console.log(isChild);
+      console.log('_');
+
+      const message = (isChild
+        ? `${(lastElement.value / lastElement.parent.value).toPrecision(1) * 100}% dos usuários que viram ${lastElement.data.name.split('(')[0]} também viram ${lastElement.parent.data.name}`
+        : `${(lastElement.value / lastElement.parent.value).toPrecision(1) * 100}% de todos os usuários assistiram ${lastElement.data.name}`
+      )
+
       // Data join; key function combines name and depth (= position in sequence).
       const g = d3.select('#trail')
         .selectAll('g')
@@ -230,7 +241,7 @@ const SequenceSunburts = ({ data }) => {
         .style('fill', (d) => stringToColour((d.children ? d : d.parent).data.name));
 
       entering.append('svg:text')
-        .attr('x', (b.w + b.t) / 2)
+        .attr('x', (b.w + b.t) / 4)
         .attr('y', b.h / 2)
         .attr('dy', '0.35em')
         .attr('text-anchor', 'middle')
@@ -243,13 +254,14 @@ const SequenceSunburts = ({ data }) => {
       // Remove exiting nodes.
       g.exit().remove();
 
+      const trailX = (nodeArray.length + 1.7) * (b.w + b.s)
       // Now move and update the percentage at the end.
       d3.select('#trail').select('#endlabel')
-        .attr('x', (nodeArray.length + 0.5) * (b.w + b.s))
+        .attr('x', trailX)
         .attr('y', b.h / 2)
         .attr('dy', '0.35em')
         .attr('text-anchor', 'middle')
-        .text(percentageString);
+        .text(message);
 
       // Make the breadcrumb trail visible, if it's hidden.
       d3.select('#trail')

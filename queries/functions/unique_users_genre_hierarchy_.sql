@@ -10,7 +10,6 @@ CREATE OR REPLACE FUNCTION count_except_category (int)
     FROM
         Views
         JOIN GenreTitles ON Views.title_id = GenreTitles.title_id
-        JOIN Genres ON GenreTitles.genre_id = Genres.id
     WHERE
         genre_id != $1
         AND user_id IN ( SELECT DISTINCT
